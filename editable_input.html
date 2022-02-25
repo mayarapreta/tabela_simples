@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+      <head>
+            <meta charset="uft-8">
+            <title>Editable form &lt;input&gt; example</title>
+      
+<style>
+      textarea {
+            height: 80px;
+            background-color: #F4f7f8;
+            border: none;
+            border-left: 6px solid #558ABB;
+            color: #4D4E53;
+            width: 90px ;
+             max-width: 700px;
+             padding: 10px 10px 0px;
+            
+      }
+      playable-buttons{
+ text-align: right;
+ width: 90%;
+ max-height: 700px;
+ padding: 5px 10px 5px 26 px;
+ margin-top: auto;
+      }
+      section{
+            width: 90%;
+            max-width: 700px;
+            border: 1px  solid #4d4e53;
+            border-radius: 2px;
+            padding: 10px 14px 10px 10px;
+            margin-bottom: 10px;
+            margin-top: auto;
+      }
+     section input{
+           display: block;
+           margin: 5px;
+     } 
+
+</style>
+      </head>
+<body>
+      <section></section>
+      <!-- area da janela  de colagem-->
+      <textarea id="code" class="playable-code">
+            <input id="input1" type="text">
+            <input id="input2" type="text">
+      </textarea>
+      
+      <div class="playable-buttons">
+            <input id="resert" type="button" value="Reset">
+      </div>
+      
+</body>
+<script> 
+      var section = document.querySelector('section');
+      var textarea=document.querySelector('textarea');
+      var resert = document.querySelector('resert');
+      var edit = document.querySelector('edit');
+      var code = textarea.value;
+//vao reconhece  os varias criados do anterior
+
+function fillSection(){
+      while(section.firstChild){
+            section.removeChild(section.firstChild);
+      }
+      section.innerHTML = textarea.value;
+}
+resert.addEventListener('click', function(){
+      textarea.value= code;
+      fillSection();
+});
+
+textarea.addEventListener('input', fillSection);
+window.addEventListener('load', fillSection);
+</script>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+      <head>
+            <meta charset="uft-8">
+ <title> date control with fallback</title>
+      
+      <style>
+
+       
+       input:invalid+span:after{
+             content: '✖';
+             padding-left: 5px;
+             
+       }
+ 
+       input:valid+span::after{
+             content: '✓';
+             padding-left: 5px;
+       }
+        </style>
+        </head>
+
+       <body>
+
+             <form> <!-- calendario -->
+                   <div class="nativeDatePicker">
+                   <label for="bday"><h2>Enter your birthday:</h2></label>
+                          <input type="date" id="bday" name="bday">
+                          <span class="validity"></span>
+                   </div>
+                 <!-- font do calendario-->
+                <p class="fallbackLabel"><h2>Enter your birthday:</h2></p>
+              <div class="fallbackDatePicker">
+             <!--selecionar  a data-->
+             <span > 
+                   <label for="day">Day:</label>
+                   <select id="day" name="day">
+                         
+                   </select>
+             </span>
+             <span>  <!--selecao das datas-->
+                   <label for="month">Month:</label>
+                   <select id="month" name="month">
+                         <option selected>January</option>
+                         <option>Febreary</option>
+                         <option>March</option>
+                         <option>April</option>
+                         <option>May</option>
+                         <option>June</option>
+                         <option>july</option>
+                         <option>Augusto</option>
+                         <option>September</option>
+                         <option>October</option>
+                         <option>November</option>
+                         <option>December</option>
+                   </select>
+             </span>
+             <span> <!--selecao do ano-->
+                   <label for="year">Year:</label>
+                   <select id="year" name="year">
+
+                   </select>
+                    </span>
+                  </div>
+            </form>
+
+            <script> //define variavel
+            var nativePicker = document.querySelector('.nativePicker');
+            var fallbackPicker = document.querySelector('.fallbackPicker');
+            var fallbackLabel = document.querySelector('.fallbackLabel');
+
+            var yearSelect = document.querySelector('#year');
+            var monthSelect = document.querySelector('#month');
+            var daySelect = document.querySelector('#day');
+
+            //hide fallback initially
+
+             fallbackPicker.style.display='none';
+             fallbackLabel.style.display='none';
+
+             // test whether a new date input falls back to a text input or not 
+                
+             var test = document.createElement('input');
+
+             try{
+                   test.type = 'date';
+             } catch (e){
+                   console.log(e.description);
+             }
+             //if it does, run the code inside the if() {} block
+
+              if(test.type ==='text'){
+                    //hide the native picker and show the fallback
+                    nativePicker.style.display='none';
+                    fallbackLabel.style.display='block';
+                    fallbackPicker.style.display='block';
+
+                    //populate the day and years dynamically
+                    //(the month are always the same, therefore haedcoded)
+                    pupulateDay(monthSelect.value);
+                    populateYear();
+
+              }
+              function populateDays(month){
+                    //delete the current set of <option> elements out of the
+                        // day <select>, ready for the test set to be injected
+                              while(daySelect.firstChild){
+                         daySelect.removeChild.firstChild(daySelect.firstChild);
+                              }
+                              //create variable to hold new number of days to inject 
+                              var dayNumb;
+                              
+                              //31 or 30 days?
+
+ if(month === 'Januery' | month === 'March' | month === 'May' | month ==='July' | month === 'August' | month === 'Octuber' | month === 'December') {
+        dayNumb=30;
+             }else{
+                   //of mothe is februeary , calculate whether it is a leap year or not
+                   var year = yearSelect.value;
+                   var isLeap= new Date(year , 1 , 29).getMonth() == 1;
+                   isLeap ? dayNumb = 29 : dayNumb = 28;
+             }
+             //inject the right number of new <option> elements into the day <select>
+                  for(i = 1 ; i <= dayNum; i++){
+                        var option = document.createElement('option');
+                  }
+              //if previous day has already been set, set daySelect´s value
+              // to that day, to avoid the day jumping back to 1 when you
+              // change the day
+              if(previousDay){
+                    daySelect.value = previousDay;
+
+                    //if the previous day was set to a high number, say 31, and then
+                    // you chose a monthe with less total days in it (e.g February), this part of the code ensures that the highest day available
+                    //is selected , rather than showing a blank daySelect
+
+                    if(daySelect.value === ""){
+                            daySelect.value = previousDay -1;            
+                    }
+                     if(daySelect.value === ""){
+                           daySelect.value = previousDay - 2;
+                     }
+                     if(daySelect.value === ""){
+                           daySelect.v4 = previousDay -3;
+                     }
+                     }
+                    }
+
+                     function populateYears(){
+                           //get this year as a number
+                           var date = new Date();
+                           var year = date.getFullYear();
+
+                           // Make this year , and the 100 years befores it available in the year <select>
+                              for( var i = 0; i <= 100; i ++){
+                              var option = document.createElement('option');
+                           option.textContent = year-i;
+                           yearSelect.appendChild(option);
+                             
+                        }
+                     }
+                     //when the month or year <select> values are changed, rerun populateDays()
+                        //in case the change affected the number of available days
+                        yearSelect.onchange = function(){
+                              populateDays(monthSelect.value);
+                        }
+                        monthSelect.onchange = function(){
+                              populateDays(monthSelect.value);
+                        }
+                        //preserve day selection
+                        var previousDay;
+                        //update what day has been set to previusly
+                        //see end of populateDays() for usage
+                        daySelect.onchange= function() {
+                              previousDay = daySelect.value;
+                        }
+            </script>
+      </body>
+
+  
+</html>
